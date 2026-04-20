@@ -1,0 +1,52 @@
+
+Start
+ Program
+  SentenceBlock
+   Sentence
+    loopSentence
+     whileSentence
+      Condition
+       Expression
+        AdditiveExpression
+         MultiplicativeExpression
+          UnaryExpression
+           Identifier
+       Expression
+        AdditiveExpression
+         MultiplicativeExpression
+          UnaryExpression
+           Identifier
+      SentenceBlock
+       Sentence
+        conSentence
+         Condition
+          Expression
+           AdditiveExpression
+            MultiplicativeExpression
+             UnaryExpression
+              Identifier
+          Expression
+           AdditiveExpression
+            MultiplicativeExpression
+             UnaryExpression
+              Identifier
+         SentenceBlock
+          Sentence
+           seqSentence
+            assSentence
+             Identifier
+             Expression
+              AdditiveExpression
+               MultiplicativeExpression
+                UnaryExpression
+                 Identifier
+               MultiplicativeExpression
+                UnaryExpression
+                 Identifier
+1:	(j<,	a,	b,	3	)
+2:	(j,	_,	_,	8	)
+3:	(j<,	c,	d,	5	)
+4:	(j,	_,	_,	7	)
+5:	(+,	y,	z,	T1	)
+6:	(=,	T1,	_,	x	)
+7:	(j,	_,	_,	1	)

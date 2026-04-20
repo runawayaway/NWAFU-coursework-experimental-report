@@ -1,0 +1,18 @@
+void main(){
+float r , h , s; s=2*3.1416*r*(h+r)
+}
+
+
+void main(){
+int a,b,c; if(a>b+c){
+a = b-c;
+}else
+a = 0;
+}
+
+
+void main(){
+while(a<b)
+if(c<d)
+x = y + z ;
+}
