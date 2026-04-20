@@ -1,0 +1,51 @@
+# depslib dependency file v1.0
+1748315210 source:c:\users\24540\desktop\课程学习\算法实习\pratice\dfs(optimization).cpp
+	<bits/stdc++.h>
+
+1748313829 source:c:\users\24540\desktop\课程学习\算法实习\pratice\dfs.cpp
+	<bits/stdc++.h>
+
+1748315214 source:c:\users\24540\desktop\课程学习\算法实习\pratice\dp.cpp
+	<bits/stdc++.h>
+
+1748314383 source:c:\users\24540\desktop\课程学习\算法实习\pratice\main.cpp
+	<bits/stdc++.h>
+	<ctime>
+	<time.h>
+	<stdlib.h>
+	<windows.h>
+	"DFS.h"
+	"DFS(Optimization).h"
+	"DP.h"
+
+1748253141 c:\users\24540\desktop\课程学习\算法实习\pratice\dfs.h
+
+1748253141 c:\users\24540\desktop\课程学习\算法实习\pratice\dfs(optimization).h
+
+1748306494 c:\users\24540\desktop\课程学习\算法实习\pratice\dp.h
+
+1748315210 source:c:\users\24540\desktop\课程学习\算法实习\2023013472_郑枫\实习代码\dfs(optimization).cpp
+	<bits/stdc++.h>
+
+1748313829 source:c:\users\24540\desktop\课程学习\算法实习\2023013472_郑枫\实习代码\dfs.cpp
+	<bits/stdc++.h>
+
+1748315214 source:c:\users\24540\desktop\课程学习\算法实习\2023013472_郑枫\实习代码\dp.cpp
+	<bits/stdc++.h>
+
+1748314383 source:c:\users\24540\desktop\课程学习\算法实习\2023013472_郑枫\实习代码\main.cpp
+	<bits/stdc++.h>
+	<ctime>
+	<time.h>
+	<stdlib.h>
+	<windows.h>
+	"DFS.h"
+	"DFS(Optimization).h"
+	"DP.h"
+
+1748253141 c:\users\24540\desktop\课程学习\算法实习\2023013472_郑枫\实习代码\dfs.h
+
+1748253141 c:\users\24540\desktop\课程学习\算法实习\2023013472_郑枫\实习代码\dfs(optimization).h
+
+1748306494 c:\users\24540\desktop\课程学习\算法实习\2023013472_郑枫\实习代码\dp.h
+
