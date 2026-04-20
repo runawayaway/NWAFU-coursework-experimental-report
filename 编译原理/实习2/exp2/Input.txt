@@ -1,0 +1,8 @@
+void main()
+{
+	int l,r;
+	int mid;
+	mid = l + (r - l + 1) / 2;
+	if(mid >= k) {l = mid;}
+	else {r = mid -1;}
+}

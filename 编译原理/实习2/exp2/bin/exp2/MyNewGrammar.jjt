@@ -1,0 +1,176 @@
+/**
+ * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */options{  static = false;}PARSER_BEGIN(MyNewGrammar)package exp2;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+
+public class MyNewGrammar{  public static void main(String args [])  {    System.out.println("Reading from standard textfile.");    try    {	  InputStream in = new FileInputStream("Input.txt");//与项目文件夹下的Input.txt文件建立输入流
+	  OutputStream out = new FileOutputStream("Output.txt");//与项目文件夹下的Output.txt文件建立输出流
+      MyNewGrammar parser = new MyNewGrammar(in);
+      SimpleNode n = parser.Start();      n.dump("", out);//使用重载后的分析程序      System.out.println("Thank you.");    }    catch (Exception e)    {      System.out.println("Oops.");      System.out.println(e.getMessage());    }  }}PARSER_END(MyNewGrammar)SKIP :{  " "| "\t"| "\n"| "\r"| < "//" (~[ "\n", "\r" ])*    (      "\n"    | "\r"    | "\r\n"    ) >| < "/*" (~[ "*" ])* "*"    (      ~[ "/" ] (~[ "*" ])* "*"    )*    "/" >}TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL :
+    < DECIMAL_LITERAL > ([ "l", "L" ])?
+  | < HEX_LITERAL > ([ "l", "L" ])?
+  | < OCTAL_LITERAL > ([ "l", "L" ])? 
+    >
+| < #DECIMAL_LITERAL : [ "1"-"9" ] ([ "0"-"9" ])* >
+| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >
+| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
+}
+
+TOKEN : /* special signal */
+{
+  < MAIN : "main" >
+}
+
+TOKEN : /* keyword */
+{
+  < IF : "if" >
+| < ELSE : "else" >
+| < WHILE : "while" >
+}
+
+TOKEN : /* operators */
+{
+  < ADD : "+" >
+| < MUL : "*" >
+| < DIV : "/" >
+| < MINUS : "-" >
+| < MOD : "%" >
+| < EQL : "=" >
+| < LB : "{" >
+| < RB : "}" >
+}
+
+TOKEN : /*relational operator，用于布尔表达式的识别*/
+{
+  < RELATIONAL_OPERATOR :
+    < REQL >
+  | < UEQL >
+  | < LT >
+  | < LTE >
+  | < RT>
+  | < RTE >
+  >
+| < #REQL : "==" >
+| < #UEQL : "!=" >
+| < #LT : "<" >
+| < #LTE : "<=" >
+| < #RT : ">" >
+| < #RTE : " >=" >
+
+}
+
+TOKEN : /*var 用于声明语句的使用*/
+{
+  < TYPE :
+   < VOID >
+ | < INT >
+ | < FLOAT >
+ >
+| < #VOID : "void" >
+| < #INT : "int" >
+| < #FLOAT : "float" >
+
+}
+
+
+TOKEN : /* separators */
+{
+  < SEMI : ";" >
+|  < COMMA : "," >
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < IDENTIFIER :
+    < LETTER >
+    (
+      < LETTER >
+    | < DIGIT >
+    )* >
+| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >
+| < #DIGIT : [ "0"-"9" ] >
+}
+/*程序的入口*/SimpleNode Start() :{}{  Program()  {    return jjtThis;  }}
+/*程序*/void Program() :
+{}
+{
+  < TYPE > "main" "(" ")" "{" StatementBlock() "}"
+}
+/*表达式*/void Expression() :{}{  AdditiveExpression()
+| loopStatement()
+| decStatement()}void AdditiveExpression() :{}{  MultiplicativeExpression()  (    (      "+"    | "-"    )    MultiplicativeExpression()  )*}void MultiplicativeExpression() :{}{  UnaryExpression()  (    (      "*"    | "/"    | "%"    )    UnaryExpression()  )*}void UnaryExpression() :{}{  "(" Expression() ")"| Identifier()| Integer()}//标识符void Identifier() :{}{  < IDENTIFIER >}//类型
+void Type() :
+{}
+{
+  < TYPE >
+}
+//布尔运算符
+void RelationalOperator() :
+{}
+{
+  < RELATIONAL_OPERATOR >
+}void Integer() :{}{  < INTEGER_LITERAL >}
+void StatementBlock() :
+{}
+{
+  (Statement())*
+    
+}
+//语句
+void Statement() :
+{}
+{
+  seqStatement()
+| conStatement()
+| loopStatement()
+}
+//布尔表达式
+void BoolExpression() :
+{}
+{
+  Expression() < RELATIONAL_OPERATOR > Expression()
+}
+//循环语句
+void loopStatement() :
+{}
+{
+  "while" whileStatement()
+}
+//while循环语句
+void whileStatement() :
+{}
+{
+  "("BoolExpression()")""{"StatementBlock()"}"
+}
+//顺序语句
+void seqStatement() :
+{}
+{
+  (decStatement() | assStatment() )";"
+}
+//声明语句
+void decStatement() :
+{}
+{
+ //< TYPE > (Identifier() ("=" Expression())*) ("," Identifier() ("=" Expression())*)*
+  < TYPE > Identifier() ("," Identifier())*
+}
+//赋值语句
+void assStatment() :
+{}
+{
+  Identifier() "=" Expression()
+}
+//条件语句
+void conStatement() :
+{}
+{
+  "if" "(" BoolExpression() ")" "{" StatementBlock() "}"
+  "else" "{"StatementBlock()"}"
+}
