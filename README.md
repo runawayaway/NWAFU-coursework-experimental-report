@@ -1,2 +1,2 @@
-# NWAFU-homework-experimental-report
+# NWAFU-coursework-experimental-report
 For NWAFU students' information
