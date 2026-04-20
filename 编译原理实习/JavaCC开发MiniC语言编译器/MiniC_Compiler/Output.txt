@@ -1,0 +1,142 @@
+(40, void)
+(11, main)
+(54, ()
+(55, ))
+(50, {)
+(40, int)
+(56, a)
+(49, ,)
+(56, b)
+(49, ,)
+(56, c)
+(49, ,)
+(56, d)
+(48, ;)
+(17, switch)
+(54, ()
+(56, a)
+(55, ))
+(50, {)
+(19, case)
+(7, 0)
+(59, :)
+(56, a)
+(28, ++)
+(48, ;)
+(60, break;)
+(19, case)
+(7, 1)
+(59, :)
+(56, b)
+(28, ++)
+(48, ;)
+(19, case)
+(7, 2)
+(59, :)
+(56, c)
+(29, --)
+(48, ;)
+(60, break;)
+(19, case)
+(7, 3)
+(59, :)
+(56, c)
+(28, ++)
+(48, ;)
+(60, break;)
+(18, default)
+(59, :)
+(29, --)
+(56, d)
+(48, ;)
+(51, })
+(51, })
+
+Start
+ Program
+  Type
+  SentenceBlock
+   Sentence
+    seqSentence
+     decSentence
+      Type
+      Identifier
+      Identifier
+      Identifier
+      Identifier
+  SentenceBlock
+   Sentence
+    switchSentence
+     Expression
+      AdditiveExpression
+       MultiplicativeExpression
+        UnaryExpression
+         Identifier
+     Expression
+      AdditiveExpression
+       MultiplicativeExpression
+        UnaryExpression
+         Integer
+     SentenceBlock
+      Sentence
+       seqSentence
+        selfDeal
+         Identifier
+     Expression
+      AdditiveExpression
+       MultiplicativeExpression
+        UnaryExpression
+         Integer
+     SentenceBlock
+      Sentence
+       seqSentence
+        selfDeal
+         Identifier
+     Expression
+      AdditiveExpression
+       MultiplicativeExpression
+        UnaryExpression
+         Integer
+     SentenceBlock
+      Sentence
+       seqSentence
+        selfDeal
+         Identifier
+     Expression
+      AdditiveExpression
+       MultiplicativeExpression
+        UnaryExpression
+         Integer
+     SentenceBlock
+      Sentence
+       seqSentence
+        selfDeal
+         Identifier
+     SentenceBlock
+      Sentence
+       seqSentence
+        selfDeal
+         Identifier
+1:	(jne,	a,	0,	5	)
+2:	(+,	1,	a,	T1	)
+3:	(=,	T1,	_,	a	)
+4:	(j,	_,	_,	19	)
+5:	(jne,	a,	1,	9	)
+6:	(+,	1,	b,	T2	)
+7:	(=,	T2,	_,	b	)
+8:	(j,	_,	_,	10	)
+9:	(jne,	a,	2,	13	)
+10:	(-,	1,	c,	T3	)
+11:	(=,	T3,	_,	c	)
+12:	(j,	_,	_,	19	)
+13:	(jne,	a,	3,	17	)
+14:	(+,	1,	c,	T4	)
+15:	(=,	T4,	_,	c	)
+16:	(j,	_,	_,	19	)
+17:	(-,	1,	d,	T5	)
+18:	(=,	T5,	_,	d	)
+
+variable name:a, type:int, row:2, column:13
+variable name:b, type:int, row:2, column:16
+variable name:c, type:int, row:2, column:19
+variable name:d, type:int, row:2, column:22

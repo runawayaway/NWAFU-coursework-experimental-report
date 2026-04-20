@@ -1,0 +1,8 @@
+void main(){
+	int i, a, b;
+	do{
+		a = a * b;
+		b = b + a;
+	}
+	while(i != 0);
+}

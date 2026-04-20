@@ -1,0 +1,18 @@
+void main(){
+	int a, b, c, d;
+	switch(a){
+	case 0:
+		a++;
+		break;
+	case 1:
+		b++;
+	case 2:
+		c--;
+		break;
+	case 3:
+	    c++;
+	    break;
+	default:
+		--d;
+	}
+}

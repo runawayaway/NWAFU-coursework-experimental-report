@@ -1,0 +1,880 @@
+/**
+ * JJTree template file created by SF JavaCC plugin 1.5.28+ wizard for JavaCC 1.5.0+
+ */
+options
+{
+  static = false;
+}
+
+PARSER_BEGIN(MyNewGrammar)
+
+package parser;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import util.*;
+
+public class MyNewGrammar
+{
+  static public QTTable qtTable = new QTTable();
+
+  public static ArrayList < String > errorList = new ArrayList < String > ();
+
+  public static ArrayList < Token > tokenList = new ArrayList < Token > ();
+  
+  public void printQTList()
+  {
+    qtTable.printQTTable();
+  }
+  public static void main(String args [])
+  {
+    try
+    {
+      InputStream in = new FileInputStream("Input.txt"); //与项目文件夹下的Input.txt文件建立输入流
+      OutputStream out = new FileOutputStream("Output.txt"); //与项目文件夹下的Output.txt文件建立输出流
+      MyNewGrammarTokenManager manager = new MyNewGrammarTokenManager(new SimpleCharStream(in));//通过JavaCC自带的两个类进行数据的输入
+      Token t;
+      t = manager.getNextToken();//通过getNextToken获取数据
+      while(t.kind != 0) {//当读到数据的结尾，即EOF时，其内部的标识符为0，所以以此为结束标志
+	  	out.write(("(" + t.kind + ", " + t.image + ")\n").getBytes());//输出内部标识符与自身
+        t = manager.getNextToken();
+      }
+      in.close();
+      in = new FileInputStream("Input.txt");//关闭并重新建立输出流，以重置读取进度
+      MyNewGrammar parser = new MyNewGrammar(in);
+      SimpleNode n = parser.Start();
+      n.dump("", out); //使用重载后的分析程序
+      out.write("\n".getBytes());
+      qtTable.printQTTable(out);
+      System.out.println("Thank you.");
+      in.close();
+      out.close();
+    }
+    catch (Exception e)
+    {
+      System.out.println("Oops.");
+      System.out.println(e.getMessage());
+    }
+  }
+
+  public static void dealData(String filename)
+  {
+	VariableNameGenerator.sequenceId = 0;//进行数据的初始化
+	errorList.clear();
+	tokenList.clear();
+	qtTable.clear();
+    try
+    {
+      InputStream in = new FileInputStream(filename); //指定文件建立输入流
+      OutputStream out = new FileOutputStream("Output.txt"); //与项目文件夹下的Output.txt文件建立输出流
+      MyNewGrammarTokenManager manager = new MyNewGrammarTokenManager(new SimpleCharStream(in));//通过JavaCC自带的两个类进行数据的输入
+      Token t;
+      t = manager.getNextToken();//通过getNextToken获取数据
+      while(t.kind != 0) {//当读到数据的结尾，即EOF时，其内部的标识符为0，所以以此为结束标志
+	  	out.write(("(" + t.kind + ", " + t.image + ")\n").getBytes());//输出内部标识符与自身
+        t = manager.getNextToken();
+      }
+      in.close();
+      in = new FileInputStream("Input.txt");//关闭并重新建立输出流，以重置读取进度
+      MyNewGrammar parser = new MyNewGrammar(in);
+      SimpleNode n = parser.Start();
+      n.dump("", out); //使用重载后的分析程序
+      out.write("\n".getBytes());
+      qtTable.printQTTable(out);
+      out.write("\n".getBytes());
+  	  Iterator<Token> itr =  tokenList.iterator();
+	  while(itr.hasNext())
+	  {
+	    Token tmp = (Token) itr.next();
+		out.write((tmp.showInfo() + "\n").getBytes());//向文件中写入符号表
+	  }
+      in.close();
+      out.close();
+    }
+    catch (Exception e)
+    {
+      errorList.add(e.getMessage());
+    }
+  }
+  boolean checkExsit(String image)
+  {
+    if(tokenList.isEmpty() == true) return false;
+    Iterator<Token> itr = tokenList.iterator();
+	while(itr.hasNext())
+	{
+	  Token tmp = (Token) itr.next();
+	  if(tmp.image.equals(image))
+	  {
+	    return true;
+	  }
+	}
+	return false;
+  }
+}
+
+PARSER_END(MyNewGrammar)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+| < "//" (~[ "\n", "\r" ])*
+    (
+      "\n"
+    | "\r"
+    | "\r\n"
+    ) >
+| < "/*" (~[ "*" ])* "*"
+    (
+      ~[ "/" ] (~[ "*" ])* "*"
+    )*
+    "/" >
+}
+
+TOKEN : /* LITERALS */
+{
+  < INTEGER_LITERAL :
+    < DECIMAL_LITERAL > ([ "l", "L" ])?
+  | < HEX_LITERAL > ([ "l", "L" ])?
+  | < OCTAL_LITERAL > ([ "l", "L" ])? 
+  >
+| < #DECIMAL_LITERAL : ( "0" | ([ "1"-"9" ] ([ "0"-"9" ])*))("." ([ "0"-"9" ])*)? >
+| < #HEX_LITERAL : "0" [ "x", "X" ] ([ "0"-"9", "a"-"f", "A"-"F" ])+ >
+| < #OCTAL_LITERAL : "0" ([ "0"-"7" ])* >
+}
+
+TOKEN : /* special signal */
+{
+  < MAIN : "main" >
+}
+
+TOKEN : /* keyword */
+{
+  < IF : "if" >
+| < ELSE : "else" >
+| < WHILE : "while" >
+| < DO : "do" >
+| < FOR : "for" >
+| < SWITCH : "switch" >
+| < SDEFAULT : "default" >
+| < CASE : "case" >
+| < TURE : "ture" >
+| < FALSE : "false" >
+}
+
+TOKEN : /* operators */
+{
+  < ADD : "+" >
+| < MUL : "*" >
+| < DIV : "/" >
+| < MINUS : "-" >
+| < MOD : "%" >
+| < EQL : "=" >
+| < SELFADD : "++" >
+| < SELFMINUS : "--" >
+}
+
+TOKEN : /*LogicalOperators*/
+{
+  < AND : "&&" >
+| < OR : "||" >
+| < NOT : "!" >
+}
+
+TOKEN : /*relational operator，用于布尔表达式的识别*/
+{
+  < RELATIONAL_OPERATOR :
+    < REQL >
+  | < UEQL >
+  | < LT >
+  | < LTE >
+  | < RT >
+  | < RTE > 
+  >
+| < #REQL : "==" >
+| < #UEQL : "!=" >
+| < #LT : "<" >
+| < #LTE : "<=" >
+| < #RT : ">" >
+| < #RTE : " >=" >
+}
+
+TOKEN : //变量类型,用于声明语句的使用
+{
+  < TYPE :
+    < VOID >
+  | < INT >
+  | < FLOAT >
+  | < CHAR >
+  | < STRING >
+  >
+| < #VOID : "void" >
+| < #INT : "int" >
+| < #LONGLONG : "long long" >
+| < #FLOAT : "float" >
+| < #DOUBLE : "double" >
+| < #CHAR : "char" >
+| < #STRING : "string" >
+}
+
+TOKEN : /* separators */
+{
+  < SEMI : ";" >
+| < COMMA : "," >
+| < LB : "{" >
+| < RB : "}" >
+| < LBK : "[" >
+| < RBK : "]" >
+| < LP : "(" >
+| < RP : ")" >
+}
+
+TOKEN : /* IDENTIFIERS */
+{
+  < IDENTIFIER :
+    < LETTER >
+    (
+      < LETTER >
+    | < DIGIT >
+    )* >
+| < #LETTER : [ "_", "a"-"z", "A"-"Z" ] >
+| < #DIGIT : [ "0"-"9"] >
+}
+
+
+
+//程序的入口
+SimpleNode Start() :
+{}
+{
+  Program()
+  {
+    return jjtThis;
+  }
+}
+
+//程序
+void Program() :
+{}
+{
+  Type() "main" "(" ")" "{"
+  (
+    SentenceBlock()
+  )*
+  "}"
+}
+
+//表达式
+String Expression() :
+{
+  String s = null;
+}
+{
+  s = AdditiveExpression()
+  {
+    return s;
+  }
+}
+
+String AdditiveExpression() :
+{
+  String a = null;
+  String b = null;
+  String result = null;
+  Token t = null;
+}
+{
+  a = MultiplicativeExpression()
+  {
+    result = a;
+  }
+  (
+    (
+      t = "+"
+    | t = "-"
+    )
+    b = MultiplicativeExpression()
+    {
+      result = VariableNameGenerator.genVariableName();
+      QTInfo qtInfo = new QTInfo(t.image, a, b, result);
+      qtTable.addQTInfo(qtInfo);
+      a = result;
+    }
+  )*
+  {
+    return result;
+  }
+}
+
+String MultiplicativeExpression() :
+{
+  String a = null;
+  String b = null;
+  String result = null;
+  Token t = null;
+}
+{
+  a = UnaryExpression()
+  {
+    result = a;
+  }
+  (
+    (
+      t = "*"
+    | t = "/"
+    | t = "%"
+    )
+    b = UnaryExpression()
+    {
+      result = VariableNameGenerator.genVariableName();
+      QTInfo qtInfo = new QTInfo(t.image, a, b, result);
+      qtTable.addQTInfo(qtInfo);
+      a = result;
+    }
+  )*
+  {
+    return result;
+  }
+}
+
+String UnaryExpression() :
+{
+  String s = null;
+  Token t = null;
+}
+{
+  (
+    "(" s = Expression() ")"
+  | (
+      t = Identifier()
+      {
+	    s = t.image;
+        if(this.checkExsit(t.image) == false)
+        {
+          errorList.add(t.endLine + "行" + t.endColumn + "列：" + "变量"
+          + t.image + "未定义");
+        }
+      }
+    )
+  | s = Integer()
+  )
+  {
+    return s;
+  }
+}
+
+//类型
+String Type() :
+{
+  String s = null;
+}
+{
+  s = < TYPE >.image
+  {
+    return s;
+  }
+}
+
+//标识符
+Token Identifier() :
+{
+  Token t = null;
+}
+{
+  t = < IDENTIFIER >
+  {
+    return t;
+  }
+}
+
+//关系表达式
+void RelationalOperator() :
+{}
+{
+  < RELATIONAL_OPERATOR >
+}
+
+String Integer() :
+{
+  Token t = null;
+}
+{
+  t = < INTEGER_LITERAL >
+  {
+    return t.image;
+  }
+}
+
+void SentenceBlock() :
+{}
+{
+  Sentence()
+| ("{"
+  (
+    SentenceBlock()
+  )*
+  "}")
+}
+
+//语句
+void Sentence() :
+{}
+{
+  seqSentence()
+| conSentence()
+| whileSentence()
+| doWhileSentence()
+| forSentence()
+| switchSentence()
+}
+
+
+//逻辑表达式，按运算顺序，从逻辑或开始识别
+ConditionValue logExpression() :
+{
+  ConditionValue cValue = new ConditionValue();
+}
+{
+  cValue = orExpression()
+  {
+    return cValue;
+  }
+}
+
+//逻辑或
+ConditionValue orExpression() :
+{
+  ConditionValue cValue1 = new ConditionValue();
+  ConditionValue cValue2 = new ConditionValue();
+}
+{
+  cValue1 = andExpression()
+  {
+    cValue2 = cValue1;
+  }
+  (
+    "||"
+    {
+      cValue1.backpatchFalseChain(QTInfo.innerIdSeqen + 1);
+    }
+    cValue2 = andExpression()
+    {
+	  cValue2.trueChain.addAll(cValue1.trueChain);
+      cValue1 = cValue2;
+    }
+  )*
+  {
+    return cValue2;
+  }
+}
+
+//逻辑与
+ConditionValue andExpression() :
+{
+  ConditionValue cValue1 = new ConditionValue();
+  ConditionValue cValue2 = new ConditionValue();
+}
+{
+  cValue1 = notExpression()
+  {
+    cValue2 = cValue1;
+  }
+  (
+    "&&"
+    {
+      cValue1.backpatchTrueChain(QTInfo.innerIdSeqen + 1);
+   	}
+    cValue2 = notExpression()
+    {
+	  cValue2.falseChain.addAll(cValue1.falseChain);
+      cValue1 = cValue2;
+    }
+  )*
+  {
+    return cValue2;
+  }
+}
+
+//逻辑非
+ConditionValue notExpression() :
+{
+  ConditionValue cValue1 = new ConditionValue();
+  ConditionValue cValue2 = new ConditionValue();
+  boolean flag = true;
+}
+{
+  ("!"
+  {
+    flag = false;
+  })?
+  cValue2 = relationalExpression()
+  {
+    if(flag)
+    {
+      cValue1.trueChain = cValue2.trueChain;
+      cValue1.falseChain = cValue2.falseChain;
+    }
+    else
+    {
+      cValue1.trueChain = cValue2.falseChain;
+      cValue1.falseChain = cValue2.trueChain;
+    }
+    return cValue1;
+  }
+}
+
+//关系表达式
+ConditionValue relationalExpression() :
+{
+  Token t = null;
+  String e1 = null;
+  String e2 = null;
+  ConditionValue cValue = new ConditionValue();
+}
+{
+  e1 = Expression()
+  (
+    t = < RELATIONAL_OPERATOR > 
+    e2 = Expression()
+  )*
+  {
+    if (t == null)
+    {
+      QTInfo qtInfo = new QTInfo("jnz", e1, "_", "T");
+      qtTable.addQTInfo(qtInfo);
+      cValue.mergeTrue(qtInfo);
+    }
+    else
+    {
+      QTInfo qtInfo = new QTInfo("j" + t.image, e1, e2, "T");
+      qtTable.addQTInfo(qtInfo);
+      cValue.mergeTrue(qtInfo);
+    }
+    QTInfo qtInfo = new QTInfo("j", "_", "_", "F");
+    qtTable.addQTInfo(qtInfo);
+    cValue.mergeFalse(qtInfo);
+  }
+  {
+    return cValue;
+  }
+}	
+
+void conSentence() :
+{
+  ConditionValue cValue = new ConditionValue();
+  int index = 0;
+}
+{
+  "if" "(" cValue = logExpression() ")"
+  {
+    cValue.backpatchTrueChain(QTInfo.innerIdSeqen + 1);
+  }
+  SentenceBlock()
+  {
+    cValue.backpatchFalseChain(QTInfo.innerIdSeqen + 1);
+  }
+  (
+    LOOKAHEAD(1)
+    "else"
+    {
+      QTInfo qtInfo = new QTInfo("j", "_", "_", "");
+      qtTable.addQTInfo(qtInfo);
+      index = QTInfo.innerIdSeqen;
+      cValue.backpatchFalseChain(QTInfo.innerIdSeqen + 1);
+    }
+    SentenceBlock()
+    {
+	  qtInfo = qtTable.get(index - 1);
+      qtInfo.setResult(QTInfo.innerIdSeqen + 1);
+    }
+  )?
+}
+
+void LogicalOperators() :
+{}
+{
+  (
+    "&&"
+  | "||"
+  | "!"
+  )
+}
+
+//while循环语句
+void whileSentence() :
+{
+  ConditionValue cValue = new ConditionValue();
+  int index = 0;
+}
+{
+  "while" "("
+    {
+      index = QTInfo.innerIdSeqen + 1;
+    }
+    cValue = logExpression()
+  ")"
+  {
+    cValue.backpatchTrueChain(QTInfo.innerIdSeqen + 1);
+  }
+  SentenceBlock()
+  {
+    QTInfo qtInfo = new QTInfo("j", "_", "_", index);
+    qtTable.addQTInfo(qtInfo);
+    cValue.backpatchFalseChain(QTInfo.innerIdSeqen + 1);
+  }
+}
+
+//dowhile循环语句
+void doWhileSentence() :
+{
+  ConditionValue cValue = new ConditionValue();
+  int index = 0;
+}
+{
+  "do"
+  {
+    index = QTInfo.innerIdSeqen + 1;
+  }
+  SentenceBlock()
+  "while" "(" cValue = logExpression() ")"
+  {
+    cValue.backpatchTrueChain(index);
+    cValue.backpatchFalseChain(QTInfo.innerIdSeqen + 1);
+  }";"
+}
+
+//自增自减识别，主要用于for循环
+void selfDeal() :
+{
+  Token op = null;
+  Token e = null;
+  String t = null;
+}
+{
+  (
+	  (
+	    e = Identifier()
+	    (
+	      op = "++"
+	    | op = "--"
+	    )
+	  )
+	|
+	  (
+	    (	      op = "++"
+	    | op = "--"
+	    )
+	    e = Identifier()
+	  )
+  )
+  {
+	System.out.println("do");
+    if(this.checkExsit(e.image) == false)
+    {
+      errorList.add(e.endLine + "行" + e.endColumn + "列：" + "变量"
+      + e.image + "未定义");
+    }
+	t = VariableNameGenerator.genVariableName();
+    QTInfo qtInfo = new QTInfo(op.image.substring(0, 1), "1", e.image, t);
+    qtTable.addQTInfo(qtInfo);
+    qtInfo = new QTInfo("=", t, "_", e.image);
+    qtTable.addQTInfo(qtInfo);
+  }
+}
+
+//for循环语句
+void forSentence() :
+{
+  ConditionValue cValue = new ConditionValue();
+  int result1 = 0;
+  int result2 = 0;
+}
+{
+  "for" "("
+  (
+    decSentence()
+  | assSentence()
+  )? ";"
+  {
+    result1 = QTInfo.innerIdSeqen + 1;
+  }
+  (cValue = logExpression()
+   {
+     result2 = QTInfo.innerIdSeqen + 1;
+   })? ";"
+  
+  (
+    LOOKAHEAD(2)
+    selfDeal()
+    {
+      QTInfo qtInfo = new QTInfo("j", "_", "_", result1);
+      qtTable.addQTInfo(qtInfo);
+    }
+  | assSentence()
+  )?
+  ")"
+  {
+    cValue.backpatchTrueChain(QTInfo.innerIdSeqen + 1);
+  }
+  SentenceBlock()
+  {
+    QTInfo qtInfo = new QTInfo("j", "_", "_", result2);
+    qtTable.addQTInfo(qtInfo);
+    cValue.backpatchFalseChain(QTInfo.innerIdSeqen + 1);
+  }
+}
+
+//switch选择语句
+void switchSentence() :
+{
+  String e1 = null;
+  String e2 = null;
+  int index = 0;
+  int last = 0;
+  boolean flag = false;
+  ConditionValue cValue = new ConditionValue();
+}
+{
+  "switch" "(" e1 = Expression() ")" 
+  "{"
+    (
+      "case" e2 = Expression() ":"
+      {
+        QTInfo qtInfo = new QTInfo("jne", e1, e2, "");
+        qtTable.addQTInfo(qtInfo);
+        index = QTInfo.innerIdSeqen;
+      }
+      (
+        SentenceBlock()
+      )*
+      {
+		if(flag == false)
+		{
+		  cValue.backpatchFalseChain(index + 1);
+		  cValue.clearFalse();
+		}
+		flag = false;
+		
+        qtInfo = new QTInfo("j", "_", "_", "");
+        qtTable.addQTInfo(qtInfo);
+        qtInfo = qtTable.get(index - 1);
+        qtInfo.setResult(QTInfo.innerIdSeqen + 1);
+        
+        index = QTInfo.innerIdSeqen;
+      }
+      (        "break;"
+        {
+          flag = true;
+        }
+      )?
+      {
+        qtInfo = qtTable.get(index - 1);
+        if(flag == true)
+        {
+          cValue.mergeTrue(qtInfo);
+        }
+        else
+        {
+          cValue.mergeFalse(qtInfo);
+        }
+      }
+    )*
+    ("default" ":"
+    SentenceBlock())?
+    {
+      cValue.backpatchTrueChain(QTInfo.innerIdSeqen + 1);
+    }
+  "}"
+}
+//顺序语句
+void seqSentence() :
+{}
+{
+  (
+    decSentence()
+  | LOOKAHEAD(2)
+    assSentence()
+  | selfDeal()
+  ) ";"
+}
+
+//声明语句
+void decSentence() :
+{
+  String type = null;
+  Token t = null;
+  String e;
+}
+{
+  type = Type()
+  t = Identifier()
+  {
+    if(this.checkExsit(t.image))
+    {
+      errorList.add(t.endLine + "行" + t.endColumn +"列：" + "变量"
+      + t.image + "重复定义");
+    }
+    else
+    {
+	  t.type = type;
+      tokenList.add(t);
+    }
+  }
+  (
+    "=" e = Expression()
+    {
+      QTInfo qtInfo = new QTInfo("=", e, "_", t.image);
+      qtTable.addQTInfo(qtInfo);
+    }
+  )?
+  (
+    "," t = Identifier()
+    {
+      if(this.checkExsit(t.image))
+      {
+        errorList.add(t.endLine + "行" + t.endColumn +"列：" + "变量"
+        + t.image + "重复定义");
+      }
+      else
+      {
+	    t.type = type;
+        tokenList.add(t);
+      }
+    }
+    (
+      "=" e = Expression()
+      {
+        QTInfo qtInfo = new QTInfo("=", e, "_", t.image);
+        qtTable.addQTInfo(qtInfo);
+      }
+    )?
+  )*
+}
+
+//赋值语句
+void assSentence() :
+{
+  String arg1 = null;
+  Token result = null;
+}
+{
+  result = Identifier() 
+  "=" 
+  arg1 = Expression()
+  {
+    if(this.checkExsit(result.image) == false)
+    {
+      errorList.add(result.endLine + "行" + result.endColumn + "列：" + "变量"
+      + result.image + "未定义");
+    }
+    QTInfo qtInfo = new QTInfo("=", arg1, "_", result.image);
+    qtTable.addQTInfo(qtInfo);
+  }
+}
