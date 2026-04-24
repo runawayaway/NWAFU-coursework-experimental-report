@@ -1,0 +1,34 @@
+【回归预测实验环境配置】
+
+1. 操作系统
+- Windows
+
+2. Python 环境
+- 环境类型：Conda
+- Python 版本：3.8.18
+
+3. 依赖库（建议版本范围）
+- numpy >= 1.20
+- pandas >= 1.3
+- scikit-learn >= 1.1
+- matplotlib >= 3.5
+- seaborn >= 0.11
+
+4. 安装命令（示例）
+- pip install numpy pandas scikit-learn matplotlib seaborn
+
+5. 运行方式
+- 在项目根目录执行：
+  python 2023011112_郑瑾_回归预测代码.py
+
+6. 输出说明
+- 运行后将自动生成目录：regression_output/
+- 运行后将自动生成公开数据目录：public_data/
+- 公开数据文件：public_data/california_housing.csv
+- 图表输出在：regression_output/figures/
+- 指标表输出在：regression_output/tables/
+- 汇总信息：regression_output/summary.json
+
+7. 可复现说明
+- 代码已固定随机种子 RANDOM_STATE=42
+- 数据集为公开数据集 California Housing（首次下载后会本地缓存）
